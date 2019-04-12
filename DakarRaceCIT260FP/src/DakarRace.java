@@ -10,6 +10,8 @@ import util.Menu;
 /**
  * @author Pavel Shvets
  *         Noldis Chumacero
+ *         
+ *         https://github.com/nchumacero/cit260dakar.git
  *
  */
 public class DakarRace {
