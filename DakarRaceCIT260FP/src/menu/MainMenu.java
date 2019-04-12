@@ -1,11 +1,9 @@
 package menu;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import dakar.Vehicle;
 import dakar.Car;
 import dakar.Bike;
 import dakar.Truck;
@@ -59,10 +57,13 @@ public class MainMenu extends Menu {
                 new MenuItem('2', "Create a BIKE"),
                 new MenuItem('3', "Create a TRUCK"),
                 new MenuItem('4', "List all Vehicles"),
-                new MenuItem('5', "Create a full race"),
-                new MenuItem('6', "Store the race to disk"),
-                new MenuItem('7', "Retrieve the race from disk"),
-                new MenuItem('H', "Help Menu"),
+                new MenuItem('5', "Simulate a RACE!"),
+                new MenuItem('6', "Clean all vehicles"),
+                new MenuItem('7', "I'm lazy... Create a full race"),
+                new MenuItem('8', "Store the race to disk"),
+                new MenuItem('9', "Retrieve the race from disk"),
+                new MenuItem('W', "Show the [W]inners!"),
+                //new MenuItem('H', "Help Menu"),
                 new MenuItem('Q', "Quit Program")
         };
     }
@@ -75,28 +76,39 @@ public class MainMenu extends Menu {
      */
     @Override
     protected boolean handleMenuSelection(char key) {
-        
-        
-        
+       
         switch (Character.toUpperCase(key)) {
             case '1': 
-                System.out.println("Implement Add Prophet here");
+            	createCar();
                 break;
             case '2':
-                System.out.println("You typed 2");
+            	createBike();
                 break;
             case '3':
-                System.out.println("You typed 3");
+            	createTruck();;
                 break;
             case '4':
             	listAllVehicles();
+                break;
+            case '5':
+            	simulateRace();
                 break;                
-                
+            case '6':
+            	cleanListsVehicles();
+                break;                
+            case '7':
+            	createFullRace();
+                break;  
+            case '8':
+			storeRace("MyRace.txt", listOfCars, listOfBikes, listOfTrucks);
+                break;
+            case 'W':
+            	showWinners();
+                break;                
             case 'H':
                 Menu helpMenu = new HelpMenu();
                 helpMenu.display();
                 break;
-                
             case 'Q':
                 return false;
                 
@@ -108,7 +120,50 @@ public class MainMenu extends Menu {
         return true;
     }
     
+    /*
+     * Option 1 : Create a Car
+     * 
+     * This option create a new Car object. 
+     * The new car is added to the listOfCar Array.
+     * 
+     * */
     
+    void createCar()
+    {
+    	Car car = new Car();
+    	listOfCars.add(car);
+    	System.out.println("A new car was created: " + car);
+    }
+    
+    /*
+     * Option 2 : Create a Bike
+     * 
+     * This option create a new Bike object.
+     * The new bike is added to the listOfBikes Array. 
+     * 
+     * */
+    
+    void createBike()
+    {
+    	Bike bike = new Bike();
+    	listOfBikes.add(bike);
+    	System.out.println("A new bike was created: " + bike);
+    }    
+    
+    /*
+     * Option 3 : Create a Truck
+     * 
+     * This option create a new Truck object.
+     * The new truck is added to the listOfTrucks Array. 
+     * 
+     * */
+    
+    void createTruck()
+    {
+    	Truck truck = new Truck();
+    	listOfTrucks.add(truck);
+    	System.out.println("A new truck was created: " + truck);
+    }    
     
     
     /*
@@ -123,6 +178,7 @@ public class MainMenu extends Menu {
     
     public void listAllVehicles()
     {
+    	System.out.println("List of vehicles");
     	String emptyList = "The list is empty";
 	    for(Car car : listOfCars)
 		{
@@ -145,6 +201,234 @@ public class MainMenu extends Menu {
 		}
     }
     
+    /*
+     * Option 5 : Simulate a Race!
+     * 
+     * This option give some kilometers to race to the objects
+     * Every object runs in a random speed.
+     * According to the object the speed is different using polymorfism
+     *  
+     * */
+    
+    public void simulateRace()
+    {
+		for(Car car : listOfCars)
+		{
+			car.setSpeed();
+			car.run(KILOMETERS_400);
+			System.out.println(car.toString());
+		}
+		for(Bike bike : listOfBikes)
+		{
+			bike.setSpeed();
+			bike.run(KILOMETERS_400);
+			System.out.println(bike.toString());
+		}
+		for(Truck truck : listOfTrucks)
+		{
+			truck.setSpeed();
+			truck.run(KILOMETERS_400);
+			System.out.println(truck.toString());
+		}
+    	System.out.println("The race ends.");
+    }    
+    
+    
+    /*
+     * Option 6 : Clean all list of vehicles
+     * 
+     * This option clean all the lists
+     * List of Cars
+     * List of Bikes
+     * List of Trucks
+     * 
+     * */
+    
+    public void cleanListsVehicles()
+    {
+    	
+    	listOfCars.clear();
+    	listOfBikes.clear();
+    	listOfTrucks.clear();
+    	System.out.println("All the list of vehicles ware cleaned.");
+    }    
+    
+    
+    /*
+     * Option 7 : I'm lazy... create a full race
+     * 
+     * This option clean all the lists
+     * Create some cars
+     * Create some bikes
+     * Create some trucks
+     * Simulate the race and show the results
+     * Show the winners of the race
+     * Store all the race
+     * Clean the lists
+     * Retrieve the race
+     * 
+     * */
+    
+    public void createFullRace()
+    {
+    	cleanListsVehicles();
+    	createCar();
+    	createTruck();
+    	createCar();
+    	createBike();
+    	createTruck();
+    	createTruck();
+    	createBike();
+    	createCar();
+    	createTruck();
+    	createCar();
+    	createBike();
+    	createBike();
+    	createTruck();
+    	createCar();
+    	createTruck();
+    	createBike();
+    	createTruck();
+    	simulateRace();
+    	showWinners();
+    	storeRace("race01.txt", listOfCars, listOfBikes, listOfTrucks);
+    	cleanListsVehicles();
+		retrieveRace("race01.txt", listOfCars, listOfBikes, listOfTrucks);
+		listAllVehicles();		
+    }
+    
+    /*
+     * Option 8 : Store the race to disk
+     * 
+     * Store the race on the disk
+     * All the Cars
+     * All the Bikes
+     * All the Trucks
+     * 
+     * */
+    
+    public static void storeRace(String fileName, ArrayList<Car> cars, ArrayList<Bike> bikes, ArrayList<Truck> trucks)
+	{
+		PrintWriter file;
+		try {
+			file = new PrintWriter(fileName);
+		    for(Car car : cars)
+		    {
+		    	file.println(car.toString());
+		    }
+		    for(Bike bike : bikes)
+		    {
+		    	file.println(bike.toString());
+		    }
+		    for(Truck truck : trucks)
+		    {
+		    	file.println(truck.toString());
+		    }
+		    file.close();
+		    System.out.println("All the vehicles ware stored on disk.");
+		} catch (FileNotFoundException e) {
+			System.out.println("There was an error writing to the diks.");
+		}
+	}
+    
+    /*
+     * Option 9 : Retrieve the race from disk
+     * 
+     * Retrieve all the vehicles from disk
+     * All the Cars
+     * All the Bikes
+     * All the Trucks
+     * 
+     * */
+    
+    public static void retrieveRace(String fileName, ArrayList<Car> cars, ArrayList<Bike> bikes, ArrayList<Truck> trucks) 
+	{
+		java.io.File file = new java.io.File(fileName);
+		Scanner input;
+		try {
+			input = new Scanner(file);
+			String number = null;
+			String speed = null;
+			String distance = null;
+			String stringDistance;
+			String doubleDistance;
+			while(input.hasNext())
+			{
+				String line = input.next();
+				if (("CarBikeTruck").contains(line))
+				{
+					number = input.next();
+					speed = input.next();
+					speed = speed.substring(2, speed.indexOf("K"));
+					distance = input.next();
+					distance = distance.substring(2);
+					stringDistance = input.next();
+					doubleDistance = input.next();
+					System.out.println("Car");
+					System.out.println("number " + number);
+					System.out.println("speed " + speed);
+					System.out.println("distance " + distance);
+					System.out.println("stringDistance " + stringDistance);
+					System.out.println("doubleDistance " + doubleDistance);
+				}
+				System.out.println(line);
+				switch(line)
+				{
+				    case "Car":
+				    	Car car = new Car();
+				    	car.setNumber(Integer.parseInt(number));
+				    	car.setSpeed(Double.parseDouble(speed));
+				    	car.setDistance(Double.parseDouble(distance));
+				    	cars.add(car);
+				    	break;
+				    case "Bike":
+				    	Bike bike = new Bike();
+				    	bike.setNumber(Integer.parseInt(number));
+				    	bike.setSpeed(Double.parseDouble(speed));
+				    	bike.setDistance(Double.parseDouble(distance));
+				    	bikes.add(bike);
+				    	break;
+				    case "Truck":
+				    	Truck truck = new Truck();
+				    	truck.setNumber(Integer.parseInt(number));
+				    	truck.setSpeed(Double.parseDouble(speed));
+				    	truck.setDistance(Double.parseDouble(distance));
+				    	trucks.add(truck);
+				    	break;
+				    default: 
+	                    System.out.println("There was an error loading the records");
+	            }
+			}
+			input.close();
+		} catch (FileNotFoundException e) 
+		{
+			System.out.println("There was an error reading from disk");
+		}
+	}
+    
+    /*
+     * Option W : Show the winners
+     * 
+     * List the winners of the race
+     * Winner of cars
+     * Winner of bikes
+     * Winner of trucks
+     * 
+     * */
+    
+    public void showWinners()
+    {
+     	System.out.println("Best Car: " + bestCar(listOfCars));
+		System.out.println("Best Bike: " + bestBike(listOfBikes));
+		System.out.println("Best Truck: " + bestTruck(listOfTrucks));
+    }    
+    
+    
+    
+    /*
+     * bestCar: search for the best Car in the race according with the time
+     * and distance.
+     * */
 	public static Car bestCar(ArrayList<Car> Cars)
 	{
 		double bestTime = 9999999;
@@ -160,6 +444,10 @@ public class MainMenu extends Menu {
 		return bestCar;
 	}
 	
+    /*
+     * bestBike: search for the best Bike in the race according with the time
+     * and distance.
+     * */
 	public static Bike bestBike(ArrayList<Bike> Bikes)
 	{
 		double bestTime = 9999999;
@@ -175,6 +463,11 @@ public class MainMenu extends Menu {
 		return bestBike;
 	}
 	
+	
+    /*
+     * bestTruck: search for the best Truck in the race according with the time
+     * and distance.
+     * */
 	public static Truck bestTruck(ArrayList<Truck> Trucks)
 	{
 		double bestTime = 9999999;
@@ -189,178 +482,4 @@ public class MainMenu extends Menu {
 		}
 		return bestTruck;
 	}
-	
-	
-	public static void storeRace(String fileName, ArrayList<Car> cars, ArrayList<Bike> bikes, ArrayList<Truck> trucks) throws FileNotFoundException
-	{
-		PrintWriter file = new PrintWriter(fileName);
-		for(Car car : cars)
-		{
-			file.println(car.toString());
-		}
-		for(Bike bike : bikes)
-		{
-			file.println(bike.toString());
-		}
-		for(Truck truck : trucks)
-		{
-			file.println(truck.toString());
-		}
-		file.close();
-	}
-	
-	public static void retrieveRace(String fileName, ArrayList<Car> cars, ArrayList<Bike> bikes, ArrayList<Truck> trucks) throws IOException
-	{
-		System.out.println("ToDo: retrieveRace");
-		java.io.File file = new java.io.File(fileName);
-		Scanner input = new Scanner(file);
-		String number = null;
-		String speed = null;
-		String distance = null;
-		String stringDistance;
-		String doubleDistance;
-		while(input.hasNext())
-		{
-			String line = input.next();
-			if (("CarBikeTruck").contains(line))
-			{
-				//System.out.println("Procesar...");
-            	number = input.next();
-            	
-            	speed = input.next();
-            	speed = speed.substring(2, speed.indexOf("K"));
-            	
-            	distance = input.next();
-            	distance = distance.substring(2);
-            	
-            	stringDistance = input.next();
-            	
-            	doubleDistance = input.next();
-            	
-            	System.out.println("Car");
-            	System.out.println("number " + number);
-            	System.out.println("speed " + speed);
-            	System.out.println("distance " + distance);
-            	System.out.println("stringDistance " + stringDistance);
-            	System.out.println("doubleDistance " + doubleDistance);
-            	
-			}
-			System.out.println(line);
-			switch(line) 
-	        { 
-	            case "Car":
-	            	Car car = new Car();
-	            	car.setNumber(Integer.parseInt(number));
-	            	car.setSpeed(Double.parseDouble(speed));
-	            	car.setDistance(Double.parseDouble(distance));
-	            	cars.add(car);
-	                break; 
-	            case "Bike": 
-	            	Bike bike = new Bike();
-	            	bike.setNumber(Integer.parseInt(number));
-	            	bike.setSpeed(Double.parseDouble(speed));
-	            	bike.setDistance(Double.parseDouble(distance));
-	            	bikes.add(bike); 
-	                break; 
-	            case "Truck": 
-	            	Truck truck = new Truck();
-	            	truck.setNumber(Integer.parseInt(number));
-	            	truck.setSpeed(Double.parseDouble(speed));
-	            	truck.setDistance(Double.parseDouble(distance));
-	            	trucks.add(truck); 
-	                break; 
-	            default: 
-	                //System.out.println("no match"); 
-	        } 
-		}
-		input.close();
-	}
-    
-    
-    void holaMundo() throws IOException
-    {
-		System.out.println("Creating cars");
-		System.out.println("Creating bikes");
-		System.out.println("Creating trucks");		
-
-		listOfCars.add(new Car());
-		listOfCars.add(new Car());
-		listOfTrucks.add(new Truck());
-		listOfCars.add(new Car());
-		listOfBikes.add(new Bike());
-		listOfBikes.add(new Bike());
-		listOfCars.add(new Car());
-		listOfTrucks.add(new Truck());		
-		listOfCars.add(new Car());
-		listOfBikes.add(new Bike());
-		listOfBikes.add(new Bike());
-		listOfCars.add(new Car());
-		listOfCars.add(new Car());
-		listOfTrucks.add(new Truck());
-		listOfTrucks.add(new Truck());
-		listOfTrucks.add(new Truck());
-		
-		System.out.println("Show the vehicles");
-		System.out.println("There's no order because the number is assign in order of register.");
-		// Call a _for_ showing all the cars, trucks and bikes
-		// this call uses Polymorphism to show toString() in the objects
-		// Show the cars
-		
-		System.out.println("Run!!!!");
-		for(Car car : listOfCars)
-		{
-			car.setSpeed();
-			car.run(KILOMETERS_400);
-			System.out.println(car.toString());
-		}
-		for(Bike bike : listOfBikes)
-		{
-			bike.setSpeed();
-			bike.run(KILOMETERS_300);
-			System.out.println(bike.toString());
-		}
-		for(Truck truck : listOfTrucks)
-		{
-			truck.setSpeed();
-			truck.run(KILOMETERS_400);
-			System.out.println(truck.toString());
-		}
-		//Call the run in every object
-		System.out.println("Show the first places");
-		//Call for the three vehicles in every category
-		Car bestCar = bestCar(listOfCars);
-		Bike bestBike = bestBike(listOfBikes);
-		System.out.println("Best Car: " + bestCar);
-		System.out.println("Best Bike: " + bestBike);
-		System.out.println("Best Truck: " + bestTruck(listOfTrucks));
-		
-		
-		
-		
-		System.out.println("Store the race on disk");
-		storeRace("race01.txt", listOfCars, listOfBikes, listOfTrucks);
-		
-		// Clean all the lists
-		listOfCars.clear();
-		listOfBikes.clear();
-		listOfTrucks.clear();
-		
-		System.out.println("Restore the race from disk");
-		retrieveRace("race01.txt", listOfCars, listOfBikes, listOfTrucks);
-		
-		
-		for(Car car : listOfCars)
-		{
-			System.out.println(car.toString());
-		}
-		for(Bike bike : listOfBikes)
-		{
-			System.out.println(bike.toString());
-		}
-		for(Truck truck : listOfTrucks)
-		{
-			System.out.println(truck.toString());
-		}
-    }
-
 }

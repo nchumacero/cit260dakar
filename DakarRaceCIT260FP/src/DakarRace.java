@@ -1,9 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
-
-import dakar.Bike;
-import dakar.Car;
-import dakar.Truck;
 import menu.MainMenu;
 import util.Menu;
 
